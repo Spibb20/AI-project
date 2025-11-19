@@ -1,4 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ImgAnalysis } from "./ImgAnalysis";
+import { IngredientRecognition } from "./IngredientRecognition";
+import { ImageCreator } from "./ImageCreator";
 
 export const Tab = () => {
   return (
@@ -12,12 +15,14 @@ export const Tab = () => {
           <TabsTrigger value="Image creator">Image creator</TabsTrigger>
         </TabsList>
         <TabsContent value="Image analysis">
-          Make changes to your account here.
+          <ImgAnalysis />
         </TabsContent>
         <TabsContent value="Ingredient recognition">
-          Change your password here.
+          <IngredientRecognition />
         </TabsContent>
-        <TabsContent value="Image creator">Img creating</TabsContent>
+        <TabsContent value="Image creator">
+          <ImageCreator></ImageCreator>
+        </TabsContent>
       </Tabs>
     </div>
   );

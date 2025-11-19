@@ -3,7 +3,7 @@ export type ButtonProps = {
   children?: React.ReactNode;
   btnFor?: "adminButton" | string;
   type?: "button" | "submit" | "reset";
-  btnIcon: string;
+  btnIcon?: string | null | any;
 };
 
 export type InputPropsImgAnalysis = {
