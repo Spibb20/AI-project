@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { InferenceClient } from "@huggingface/inference";
-import { error } from "console";
 
 const HF_TOKEN = process.env.HF_TOKEN;
 const inference = new InferenceClient(HF_TOKEN);
@@ -14,12 +13,12 @@ export const POST = async (request: NextRequest) => {
       return NextResponse.json({ error: "No image provided" }, { status: 400 });
     }
 
-    const results = (await inference.objectDetection({
-      model: "facebook/detr-resnet-50",
-      data: image,
+    const results = (await inference.imageToText({
+      model: "nlpconnect/vit-gpt2-image-captioning",
+      inputs: image,
     })) as any;
 
-    const objects = results
+    /*const objects = results
       .filter((obj: any) => obj.score > 0.5)
       .map((obj: any) => ({
         label: obj.label,
@@ -27,7 +26,8 @@ export const POST = async (request: NextRequest) => {
         box: obj.box,
       }));
 
-    return NextResponse.json({ objects });
+    return NextResponse.json({ objects });*/
+    return NextResponse.json({ caption: results.generated_text });
   } catch (error) {
     console.error("Error in object detection: ", error);
     return NextResponse.json(

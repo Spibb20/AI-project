@@ -38,6 +38,7 @@ export const ImgAnalysis = () => {
   const handleFileChange = (e: any) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setUploadedImage(file);
     setPreviewUrl(URL.createObjectURL(file));
   };
 
@@ -66,7 +67,7 @@ export const ImgAnalysis = () => {
     } finally {
       setAnalyzing(false);
     }
-
+    console.log(result);
     setResult("Detected ingredients: ...");
   };
 

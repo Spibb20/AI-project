@@ -66,7 +66,7 @@ export const Input = ({
       >
         {children}
         <input
-          className="p-2 rounded-md border border-[#8E8E8E] active: text-black"
+          className="p-2 rounded-md border border-[#8E8E8E] active: text-black file-input"
           name={name}
           type={type}
           accept="image/*"
@@ -90,6 +90,7 @@ export const Input = ({
 
       <div className="flex justify-end">
         <Button
+          type="button"
           btnFor="generate"
           btnIcon="/generative.png"
           clickHandler={onGenerate}
