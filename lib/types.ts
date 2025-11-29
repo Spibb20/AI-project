@@ -1,18 +1,25 @@
+import type { ChangeEvent, ReactNode } from "react";
+
 export type ButtonProps = {
   clickHandler?: () => void;
-  children?: React.ReactNode;
-  btnFor?: "adminButton" | string;
+  children?: ReactNode;
+  btnFor?: "adminButton" | "reload" | "generate";
   type?: "button" | "submit" | "reset";
-  btnIcon?: string | null | any;
+  btnIcon?: string;
+  disabled?: boolean;
 };
 
 export type InputPropsImgAnalysis = {
-  clickHandler?: () => void;
-  children?: React.ReactNode;
+  children?: ReactNode;
   placeholder?: string;
-  type?: string;
+  type?: "file" | "text";
   name?: string;
-  required?: false;
-  onChange?: () => void;
+  value?: string;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onGenerate?: () => void;
+  previewUrl?: string | null;
+  result?: string;
+  generatedImageUrl?: string | null;
+  isLoading?: boolean;
+  error?: string;
 };
-//children, placeholder, type, required, name, onChange

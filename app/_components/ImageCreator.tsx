@@ -1,52 +1,62 @@
-import { useState } from "react";
+"use client";
+
+import { ChangeEvent, useState } from "react";
 import Image from "next/image";
 import { Button } from "./Buttons";
 import { Input } from "./Input";
 
 export const ImageCreator = () => {
-  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [result, setResult] = useState<string>("");
-  const [analyzing, setAnalyzing] = useState(false);
-  const [detectedObjects, setDetectedObjects] = useState<any[]>([]);
+  const [prompt, setPrompt] = useState("");
+  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(
+    null
+  );
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleFileChange = (e: any) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setPreviewUrl(URL.createObjectURL(file));
+  const reset = () => {
+    setPrompt("");
+    setGeneratedImageUrl(null);
+    setError("");
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setPrompt(event.target.value);
+    setError("");
   };
 
   const handleGenerate = async () => {
-    if (!uploadedImage) return;
-
-    setAnalyzing(true);
-    setDetectedObjects([]);
-
-    try {
-      const formData = new FormData();
-      formData.append("image", uploadedImage);
-      const response = await fetch("/api/object-detection", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setDetectedObjects(data.object || []);
-      } else {
-        console.error("Failed to analyze image");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setAnalyzing(false);
+    if (!prompt.trim()) {
+      setError("Please write an image prompt first.");
+      return;
     }
 
-    setResult("Detected ingredients: ...");
+    setLoading(true);
+    setGeneratedImageUrl(null);
+    setError("");
+
+    try {
+      const response = await fetch("/api/image-generation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to generate image");
+      }
+
+      setGeneratedImageUrl(data.imageUrl || null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to generate image");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="w-[400px] h-screen p-2 space-y-2">
+    <div className="w-[400px] min-h-screen p-2 space-y-3">
       <div className="w-full flex justify-between items-center">
         <div className="flex gap-2 h-4 items-center">
           <Image
@@ -55,21 +65,29 @@ export const ImageCreator = () => {
             width={16}
             height={16}
           />
-          <h1 className="font-bold">Image Analysis</h1>
+          <h1 className="font-bold">Image creator</h1>
         </div>
-        <Button type="reset" btnFor="reload" btnIcon="/reload.png"></Button>
+        <Button
+          type="button"
+          btnFor="reload"
+          btnIcon="/reload.png"
+          clickHandler={reset}
+        />
       </div>
 
       <Input
-        name="upload"
-        placeholder="Хоолны тайлбар"
+        name="image-prompt"
+        placeholder="Жишээ: Mongolian noodle soup, realistic food photography"
         type="text"
-        onChange={handleFileChange}
+        value={prompt}
+        onChange={handleChange}
         onGenerate={handleGenerate}
-        previewUrl={previewUrl}
-        result={result}
-        children="What food image do you want? Describe it briefly."
-      />
+        generatedImageUrl={generatedImageUrl}
+        isLoading={loading}
+        error={error}
+      >
+        Describe the food image you want to create.
+      </Input>
     </div>
   );
 };

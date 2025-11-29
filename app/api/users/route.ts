@@ -1,32 +1,33 @@
-import { User } from "@/utils/models/User.schema";
-import { title } from "process";
-import connectDB from "@/utils/mongodb";
+import { NextRequest, NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
+
+type DemoUser = {
+  id: number;
+  name: string;
+  age: number;
+};
+
+const users: DemoUser[] = [];
 
 export async function GET() {
-  await connectDB();
-  /*const users = [
-    {
-      id: 1,
-      username: "bobb",
-      age: 18,
-    },
-    {
-      id: 2,
-      username: "sod",
-      age: 20,
-    },
-  ];*/
-
-  const users = await User.find();
-
-  return Response.json({ users });
+  return NextResponse.json({ users });
 }
 
-export async function POST(request: Request) {
-  await connectDB();
-
-  const body = await request.json();
-  console.log(body);
-
-  return Response.json({ message: "Hello" });
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const user = {
+      id: Date.now(),
+      name: String(body.name || "Unnamed"),
+      age: Number(body.age || 0),
+    };
+    users.unshift(user);
+    return NextResponse.json({ user }, { status: 201 });
+  } catch {
+    return NextResponse.json(
+      { error: "Invalid request body" },
+      { status: 400 }
+    );
+  }
 }

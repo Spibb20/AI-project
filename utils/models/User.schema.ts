@@ -1,17 +1,15 @@
-import mongoose, { Schema } from "mongoose";
-
-type User = {
+export type User = {
   id: string;
   name: string;
-  age: number;
+  email: string;
 };
 
-const UserSchema = new Schema({
-  name: String,
-  age: Number,
-});
+export const demoUsers: User[] = [
+  {
+    id: "1",
+    name: "Demo User",
+    email: "demo@example.com",
+  },
+];
 
-export const User =
-  mongoose.models.User || mongoose.model<User>("User", UserSchema);
-
-User.create();
+export default demoUsers;

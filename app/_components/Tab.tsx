@@ -1,3 +1,5 @@
+"use client";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ImgAnalysis } from "./ImgAnalysis";
 import { IngredientRecognition } from "./IngredientRecognition";
@@ -6,22 +8,20 @@ import { ImageCreator } from "./ImageCreator";
 export const Tab = () => {
   return (
     <div>
-      <Tabs defaultValue="account" className="w-[400px]">
-        <TabsList>
-          <TabsTrigger value="Image analysis">Image analysis</TabsTrigger>
-          <TabsTrigger value="Ingredient recognition">
-            Ingredient recognition
-          </TabsTrigger>
-          <TabsTrigger value="Image creator">Image creator</TabsTrigger>
+      <Tabs defaultValue="image-analysis" className="w-[400px]">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="image-analysis">Image analysis</TabsTrigger>
+          <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
+          <TabsTrigger value="image-creator">Image creator</TabsTrigger>
         </TabsList>
-        <TabsContent value="Image analysis">
+        <TabsContent value="image-analysis">
           <ImgAnalysis />
         </TabsContent>
-        <TabsContent value="Ingredient recognition">
+        <TabsContent value="ingredients">
           <IngredientRecognition />
         </TabsContent>
-        <TabsContent value="Image creator">
-          <ImageCreator></ImageCreator>
+        <TabsContent value="image-creator">
+          <ImageCreator />
         </TabsContent>
       </Tabs>
     </div>
