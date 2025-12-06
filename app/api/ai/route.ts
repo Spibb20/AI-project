@@ -1,3 +1,6 @@
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
 import { NextRequest, NextResponse } from "next/server";
 
 const HF_TOKEN = process.env.HF_TOKEN;
@@ -19,6 +22,16 @@ Include:
 
 If the input does not contain ingredients, ask the user to provide ingredients.
 `;
+}
+
+export async function GET() {
+  return NextResponse.json({
+    ok: true,
+    route: "/api/ai",
+    runtime: "nodejs",
+    hasToken: Boolean(process.env.HF_TOKEN),
+    textModel: process.env.HF_TEXT_MODEL || null,
+  });
 }
 
 export async function POST(request: NextRequest) {

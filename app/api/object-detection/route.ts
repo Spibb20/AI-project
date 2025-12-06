@@ -1,3 +1,6 @@
+export const runtime = "nodejs";
+export const maxDuration = 60;
+import { Buffer } from "buffer";
 import { NextRequest, NextResponse } from "next/server";
 
 const HF_TOKEN = process.env.HF_TOKEN;
@@ -18,6 +21,16 @@ function cleanModelOutput(text: string) {
     .replace(/<think>[\s\S]*?<\/think>/gi, "")
     .replace(/<think>[\s\S]*/gi, "")
     .trim();
+}
+
+export async function GET() {
+  return NextResponse.json({
+    ok: true,
+    route: "/api/object-detection",
+    runtime: "nodejs",
+    hasToken: Boolean(process.env.HF_TOKEN),
+    visionModel: process.env.HF_IMAGE_TO_TEXT_MODEL || null,
+  });
 }
 
 export async function POST(request: NextRequest) {
