@@ -1,8 +1,17 @@
-export async function GET() {
-  const todos = [
-    { id: 1, title: "Note Taking", completed: false },
-    { id: 2, title: "Training", completed: false },
-  ];
+export const runtime = "nodejs";
 
-  return Response.json({ todos });
+export async function GET() {
+  return Response.json({
+    ok: true,
+    route: "/api",
+    message: "API is running",
+  });
+}
+
+export async function POST() {
+  return Response.json({
+    ok: true,
+    route: "/api",
+    message: "API POST is running",
+  });
 }
